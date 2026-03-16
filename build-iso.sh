@@ -496,11 +496,12 @@ configure_kernel() {
   }" /usr/lib/manjaro-tools/util-iso-boot.sh
   
   # Replace kernel placeholders in package files
+  # Uses \bKERNEL\b instead of ^KERNEL to also match lines with prefixes like >nonfree_x86_64
   for pkg_file in "$PROFILE_PATH_EDITION"/Packages-*; do
     msg_info "Updating kernel references in $pkg_file"
-    sed -i "s/^KERNEL\b/linux${KERNEL_NAME}/g" "$pkg_file"
-    sed -i "s/^KERNEL-headers\b/linux${KERNEL_NAME}-headers/g" "$pkg_file"
-    sed -i "s/^KERNEL-\(.*\)/linux${KERNEL_NAME}-\1/g" "$pkg_file"
+    sed -i "s/\bKERNEL-headers\b/linux${KERNEL_NAME}-headers/g" "$pkg_file"
+    sed -i "s/\bKERNEL-\([a-z0-9_-]*\)/linux${KERNEL_NAME}-\1/g" "$pkg_file"
+    sed -i "s/\bKERNEL\b/linux${KERNEL_NAME}/g" "$pkg_file"
   done
 }
 
